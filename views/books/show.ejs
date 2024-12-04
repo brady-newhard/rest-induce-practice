@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width>, initial-scale=1.0">
-        <%- include('../partials/head') %>
-        <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('../partials/head') %>
+    <title><%= title %></title>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -14,7 +14,7 @@
         </div>
     </nav>
     <!-- main content -->
-    <div class="container bottomMargin" >
+     <div class="container bottomMargin" >
         <div class="card">
             <div class="card-content">
                 <p><strong>Title:</strong><%= book.title %></p>
@@ -22,10 +22,15 @@
             </div>
             <div class="card-action">
                 <a href="/books/<%= book.id %>/edit" class="btn waves-effect waves-light teal">Edit</a>
+                <form action="/books/<%= book.id %>?_method=DELETE" method="POST">
                 <button class="btn red waves-effect waves-light">Delete</button>
                 <a href="/books" class="btn waves-effect waves-light teal">Back</a>
+                </form>
             </div>
         </div>
      </div>
 </body>
 </html>
+
+
+
