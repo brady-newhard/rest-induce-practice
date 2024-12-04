@@ -76,10 +76,16 @@ app.put('/books/:id', (req, res) => {
 })
 
 // DELETE
-// app.delete("/books/:id", (req, res) => {
-//     const bookId = parseInt(req.params.id);
-
-// })
+app.delete('/books/:id', (req, res) => {
+    const bookId = parseInt(req.params.id);
+    const bookIdx = books.findIndex(book => book.id === bookId);
+    if (bookIdx !== -1) {
+        books.splice(bookIdx, 1);
+    } else {
+        res.status(404).render('404/notFound', { title: 'Book Not Found' });
+    }
+    res.status(200).redirect('/books');
+})
 
 //---------------------Listener-------------------------//
 app.listen(3000, () => {
