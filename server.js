@@ -1,9 +1,22 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const morgan = require('morgan');
 const methodOverride = require("method-override");
 const app = express();
 const books = require("./data/books");
 const path = require("path")
+const mongoose = require('mongoose');
+const Book = require("./model/book");
+
+//-------------CONFIGURE MONGOOSE-----------------//
+
+mongoose.connect(process.env.MONGODB_URI, {
+}).then(() => {
+    console.log('Connected to MongoDB');
+}).catch((err) => {
+    console.log(err);
+})
 
 //-------------MIDDLEWARE-----------------//
 
@@ -33,7 +46,16 @@ app.get('/books/new', (req, res) => {
     res.render('books/new', { title: 'New Book' })
 });
 
-// POST
+app.post("/seed", async (req, res) => {
+    try {
+        await Book.insertMany(books);
+        res.status(201).send("Books seeded");
+    } catch (error) {
+        console.error(error.message)
+        res.status(404).send("Error seeding books")
+    }
+})
+// POST/CREATE
 app.post('/books', (req, res) => {
     const newBook = {
         id: books.length + 1,
@@ -88,6 +110,6 @@ app.delete('/books/:id', (req, res) => {
 });
 
 //---------------------Listener-------------------------//
-app.listen(3000, () => {
-    console.log('🎧Listening on http://localhost:3000')
+app.listen(process.env.PORT, () => {
+    console.log(`🎧Listening on http://localhost:${process.env.PORT}`);
 })
