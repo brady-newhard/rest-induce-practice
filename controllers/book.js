@@ -1,10 +1,18 @@
 const books = require('../data/books')
 
+async function index(req, res) {
 
+    try {
+        const books = await Book.find({});
+        res.render(("books", { title: "Book List", books }))
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal server error")
+    }   
+}
 function index(req, res) {
     res.render('books', { title: "Book List", books })
 }
-
 
 function newBook(req, res) {
     res.render('books/new', { title: 'New Book' })
@@ -28,7 +36,6 @@ function showBook(req, res) {
         res.status(404).render('404/notFound', { title: "Book not found" })
     }
 }
-
 
 function editBook(req, res) {
     const book = books.find(book => book.id === parseInt(req.params.id));
