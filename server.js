@@ -7,7 +7,7 @@ const app = express();
 const books = require("./data/books");
 const path = require("path")
 const mongoose = require('mongoose');
-const Book = require("./model/book");
+const Book = require("./models/book");
 
 //-------------CONFIGURE MONGOOSE-----------------//
 
@@ -30,10 +30,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 //-----ROUTE w/ I.N.D.U.C.E.S-------//
 
-// Index
-app.get("/", (req, res) => {
-    res.render("home")
-})
+// Seed Route
+app.use("/", require("./routes/seed"))
+
+// Home Route
+app.use('/', require('./routes/home'));
 
 // Index
 app.get("/books", (req, res) => {
@@ -46,15 +47,6 @@ app.get('/books/new', (req, res) => {
     res.render('books/new', { title: 'New Book' })
 });
 
-app.post("/seed", async (req, res) => {
-    try {
-        await Book.insertMany(books);
-        res.status(201).send("Books seeded");
-    } catch (error) {
-        console.error(error.message)
-        res.status(404).send("Error seeding books")
-    }
-})
 // POST/CREATE
 app.post('/books', (req, res) => {
     const newBook = {
