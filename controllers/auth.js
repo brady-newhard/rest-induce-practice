@@ -72,4 +72,13 @@ async function signInPost(req, res) {
     }
 
 }
-module.exports = { signUp, signUpPost, signIn, signInPost }
+function signOut(req, res) {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ message: "An error occurred during logout." })
+        }
+        res.redirect('/')
+    })
+}
+
+module.exports = { signUp, signUpPost, signIn, signInPost, signOut }
